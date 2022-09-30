@@ -1,0 +1,17 @@
+image: archlinux:latest
+
+stages:
+- fuzzing
+
+fuzzer-testing:
+stage: fuzzing
+script:
+- pacman -Syu --noconfirm
+- pacman -S clang --noconfirm
+- pacman -S cmake --noconfirm
+- pacman -S make --noconfirm
+- mkdir build
+- cd build
+- CC=clang cmake ..
+- make
+- ./tests/encode_fuzzer_test -max_total_time=30
