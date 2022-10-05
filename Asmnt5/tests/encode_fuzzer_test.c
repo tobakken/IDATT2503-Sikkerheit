@@ -8,7 +8,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   char *str = (char *)malloc(sizeof(char) * size + 1); // Create a c-string of length size + 1
   memcpy(str, data, size);                             // Copy fuzzer data to string
   str[size] = '\0';                                    // Set last byte of allocated string to '\0'
-
   encode(str);
 
   free(str);

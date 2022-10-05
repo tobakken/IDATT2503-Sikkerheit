@@ -28,6 +28,7 @@ char *replace(const char *msg, const char *old, const char *new) {
   }
 
   result[i] = '\0';
+  // result is never freed an will cause a memory leak
   return result;
 }
 
