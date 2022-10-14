@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+</head>
+<body>
+   <script>
+     let mySubmit = () => {
+     var pwd = document.getElementById('pwd').value;
+     var salt = "Lett Salt";
+     var options = {keySize : 512 / 32, iterations : 1024};
+     var client_hash = CryptoJS.PBKDF2(pwd, salt, options);
+     document.getElementById('pwd').value = client_hash.toString();
+     
+     document.getElementById("login-form").submit();
+     }
+   </script>
+   <h1>Please log in</h1>
+<form id="login-form" action="/login" method="POST">
+  <div class="container">
+    <label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" value={{ request.form.input }}>
+    <label for="psw"><b>Password</b></label>
+    <input id="pwd" type="password" placeholder="Enter Password" name="hash" value={{ request.form.input }}>
+
+  </div>
+</form>
+    <button onClick="mySubmit()">Login</button>
+</body>
+</html>
