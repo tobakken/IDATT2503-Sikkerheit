@@ -18,7 +18,8 @@ def login():
 	hashbytes = hashkey.encode('utf-8')
 	salt = bytes("Superrandom salt", 'utf-8')
 	key = PBKDF2(hashbytes, salt, 20)
-	print(hashkey)
+	print("Hash from client: " + hashkey)
+	print("Hash from server: " + str(key, 'unicode_escape'))
 	# Her kunne man lagt inn en sjekk på hashen man får ut og sjekket mot en lagret bruker.
 	# psudokoden ville blitt noe sånt:
 	# 	'user = findUser(username)
