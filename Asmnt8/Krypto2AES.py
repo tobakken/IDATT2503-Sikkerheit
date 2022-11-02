@@ -1,4 +1,5 @@
 from copy import copy
+from turtle import st
 
 
 sbox = [
@@ -37,10 +38,11 @@ sboxInv = [
         0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
         0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
 ]
-def subBytes(state):
+def sub_bytes(state):
+    print(hex(state[2]))
     for i in range(len(state)):
         state[i] = sbox[state[i]]
-def subBytesInv(state):
+def sub_bytes_inv(state):
     for i in range(len(state)):
         state[i] = sboxInv[state[i]]
 
@@ -48,42 +50,86 @@ def rotate(word, n):
     #Returnerer word(fra n ->) + word(fra 0 -> n)
     return word[n:]+word[0:n]
 
-def shiftRows(state):
+def shift_rows(state):
     for i in range(2):
         #state(fra i*2(raden) til (raden)+2(lengden pr rad))
         state[i*2:i*2+2] = rotate(state[i*2:i*2+2],i)
 
-def shiftRowsInv(state):
+def shift_rows_inv(state):
     for i in range(2):
         state[i*2:i*2+2] = rotate(state[i*2:i*2+2],-i)
 
-def mixColumns(state):
+def mix_columns(state):
     temp = copy(state)
-    state[0] = galoisFunc(temp[0])^temp[0]^galoisFunc(temp[1])
-    state[1] = galoisFunc(temp[1])^temp[1]^galoisFunc(temp[3])
-    state[2] = galoisFunc(temp[0])^galoisFunc(temp[2])^temp[2]
-    state[3] = galoisFunc(temp[1])^galoisFunc(temp[3])^temp[3]
+    state[0] = galois_func(temp[0])^temp[0]^galois_func(temp[1])
+    state[1] = galois_func(temp[1])^temp[1]^galois_func(temp[3])
+    state[2] = galois_func(temp[0])^galois_func(temp[2])^temp[2]
+    state[3] = galois_func(temp[1])^galois_func(temp[3])^temp[3]
 
-def galoisFunc(input_byte):
+def galois_func(input_byte):
     b = input_byte << 1
     c = 0x0
     if b & 0x80 != 0x80:
         c=0x1b
     return input_byte^b^c
 
+def keystream(prev_key, stream:list, round):
+    key = copy(prev_key)
+    key = rotate(key, 1)
+    sub_bytes(key)
+    for i in range(len(prev_key)):
+        if i == 1:
+            key[i] = prev_key[i]^key[i]^(round+1)
+        else: 
+            key[i] = prev_key[i]^key[i]^0x00  
+    stream.append(key)
+
+def genereate_keystream(primary_key, rounds):
+    stream = [primary_key]
+    i = 0
+    while i < rounds:
+        keystream(stream[i], stream, i)
+        i+=1
+    print(stream)
+    return stream
+    
+
+def add_round_key(state, round_key):
+    for i in range(len(state)):
+        state[i] = (state[i]^round_key[i])%256
+
+def aes(state, primary_key):
+    keystr = genereate_keystream(primary_key, 4)
+    add_round_key(state, primary_key)
+    for i in range(1,3):
+        print(i)
+        sub_bytes(state)
+        shift_rows(state)
+        mix_columns(state)
+        print(keystr[i])
+        add_round_key(state, keystr[i])
+    sub_bytes(state)
+    shift_rows(state)
+    add_round_key(state, keystr[4])
+    print(state)
+
+
 
 if __name__ == "__main__":
     state=[0,2,1,3]
-    subBytes(state)
+    primary_key = [10,20,30,40]
+    aes(state, primary_key)
+    """ sub_bytes(state)
     print("s-box: ", state)
     for i in range(len(state)):
         print(hex(state[i]), end=' ')
     print()
-    subBytesInv(state)
+    sub_bytes_inv(state)
     print("inverse of s-box: ", state)
-    shiftRows(state)
+    shift_rows(state)
     print("row: ", state)
-    shiftRowsInv(state)
+    shift_rows_inv(state)
     print("row inverse: ", state)
-    mixColumns(state)
+    mix_columns(state)
     print("Mix columns: ", state)
+    aes(state, [10,20,30,40]) """

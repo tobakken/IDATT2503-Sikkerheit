@@ -20,8 +20,11 @@ def decrypt_cbc(e, k):
     print(res)
 
 if __name__ == "__main__":
-    print("Oppgave 2 a) \nKrypter teksten 'aaaaa'\nResultatet blir:")
-    crypt_cbc("aaaaa", 3)
+    print("Oppgave 2 a) \nKrypter teksten 'aaaaaa'\nResultatet blir:")
+    crypt_cbc("aaaaaa", 3)
+
+    print("\nKrypter teksten 'dette er en test'\nResultatet blir:")
+    crypt_cbc("dette er en test", 3)
 
     print("\n\nOppgave 2 b) \nDekrypter teksten 'qvxæyy hkgdgk,,oqhdnc'\nResultatet blir:")
     decrypt_cbc("qvxæyy hkgdgk,,oqhdnc", 3)
