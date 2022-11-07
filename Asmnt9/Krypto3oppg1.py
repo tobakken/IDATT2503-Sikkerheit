@@ -15,4 +15,4 @@ if __name__ == "__main__":
     print("\n\nOppgave 1 b)")
     print("Melding '0111' og HMAC: '0100', stemmer dette?\nFår HMAC:")
     hmac(int('1001', 2), '0111', int('0101', 2), int('0011', 2))
-    print("Dette stemmer ikke med HMAC som ble oppgitt, Ingen grunn til å tro at den ikke er autentisk")
+    print("Dette stemmer med HMAC som ble oppgitt, Ingen grunn til å tro at den ikke er autentisk")

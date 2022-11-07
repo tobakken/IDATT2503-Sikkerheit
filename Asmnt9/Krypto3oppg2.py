@@ -1,5 +1,3 @@
-alfabet = " abcdefghijklmnopqrstuvwxyzæøå,."
-
 def cbc_mac(m):
     IV = 0b0
     prev_c = (m[0]^IV)
