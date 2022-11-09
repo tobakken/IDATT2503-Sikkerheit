@@ -29,7 +29,6 @@ def decrypt_rsa(e, k):
     return (e**k[0])%k[1]
 
 if __name__ == "__main__":
-    #euclid(97,15)
     #relativt prim betyr at gdc = 1
     #print(list(sy.sieve.primerange(500, 2000)))
     encrypted = crypt_rsa(12345, [3, 1388389])
