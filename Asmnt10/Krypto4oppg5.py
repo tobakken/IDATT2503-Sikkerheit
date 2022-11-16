@@ -15,18 +15,23 @@ if __name__ == "__main__":
     bob_priv = [61, 437]
     alice_pub = [283, 731]
     alice_priv = [19, 731]
+    print("Del 1")
+    print("Validerer melding (78, 394) og (19, 731)")
     validate_msg(78, 394, bob_pub)
     validate_msg(97, 337, bob_pub)
     print("Begge meldingene blir validert til en korrekt signatur, dermed er de mest sannsynlig sendt fra Bob")
     print("\n\ndel 3: kjent-melding-angrep")
     valid_message = chosen_msg_attack([38,171], [123,289], 437)
+    print(f"Får melding {valid_message}")
+    print("Validerer melding med bob sin offentlige nøkkel")
     validate_msg(valid_message[0], valid_message[1], bob_pub)
 
     print("\n\nDel 4: kryptere og signere meldingen 109")
     sign_alice = rsa_decrypt(109, alice_priv)
     crypt_bob = [rsa_encrypt(109, bob_pub), rsa_encrypt(sign_alice, bob_pub)]
-    print(crypt_bob)
+    print(f"Kryptert melding som sendes til bob: {crypt_bob}")
     decrypt_bob = [rsa_decrypt(crypt_bob[0], bob_priv), rsa_decrypt(crypt_bob[1], bob_priv)]
-    print(decrypt_bob)
+    print(f"Decryptert melding som bob mottar: {decrypt_bob}")
+    print("Validerer med alices offentlige nøkkel: ")
     validate_msg(decrypt_bob[0], decrypt_bob[1], alice_pub)
 

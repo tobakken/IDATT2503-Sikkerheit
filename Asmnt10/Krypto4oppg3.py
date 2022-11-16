@@ -21,5 +21,5 @@ def euclid(a, b):
     print(" GDC: " + str(b))
 
 if __name__ == "__main__":
-    print(ext_euclid(12**5, 19))
-    print(-7%19) 
+    print("Utvidede euclids algoritme, for å finne den inverse av 12^5: ", ext_euclid(12**5, 19))
+    print("-7 mod 19: ",-7%19) 
